@@ -18,13 +18,17 @@ export const mutations = {
 }
 
 export const actions = {
-  initState: async ({ commit, state }) => {
-    // With persistent data, length will not equal to 0
-    // because  the iniState has already been executed
-    if (state.characters.length === 0) {
-      const data = await CharacterService.getCharacterAll()
-      commit('SET_CHARACTERS', data.data)
-    }
+  initState: ({ commit, state }) => {
+    return new Promise((resolve, reject) => {
+      // With persistent data, length will not equal to 0
+      // because  the iniState has already been executed
+      if (state.characters.length === 0) {
+        return CharacterService.getCharacterAll().then((res) => {
+          commit('SET_CHARACTERS', res.data)
+          resolve(res.data)
+        })
+      }
+    })
   },
   setSelected: ({ commit }, payload) => {
     commit('SET_SELECTED', payload)
