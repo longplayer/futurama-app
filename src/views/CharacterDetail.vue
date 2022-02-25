@@ -1,27 +1,26 @@
 <template>
   <div
-    id=""
+    :id="`cid-${id}`"
     class="character-detail"
   >
-    <div>
-      <figure>
-        <img
-          :src="character.images.main"
-          :alt="`${character.name.first} ${character.name.last}'s portrait`">
-        </figure>
-      <div>
-        <p>Hello, my name is</p>
-        <h1>{{ $filters.getFullName(character.name) }}</h1>
-        <p>
-          <cite>{{ quote }}</cite>
-          <br><button @click.prevent="getNewQuote">Get new citation</button>
-        </p>
-        <p><strong>Age:</strong> {{ character.age }}</p>
-        <p><strong>Gender:</strong> {{ character.gender }}</p>
-        <p><strong>Species:</strong> {{ character.species }}</p>
-        <p><strong>Occupation:</strong> {{ character.occupation }}</p>
-        <p><strong>Home Planet:</strong> {{ character.homePlanet }}</p>
-      </div>
+    <figure class="image">
+      <img
+        :src="character.images.main"
+        :alt="`${character.name.first} ${character.name.last}'s portrait`"
+      >
+    </figure>
+    <div class="content">
+      <p>Hello, my name is</p>
+      <h1>{{ $filters.getFullName(character.name) }}</h1>
+      <p>
+        <cite>{{ quote }}</cite>
+        <br><button @click.prevent="getNewQuote">Get new citation</button>
+      </p>
+      <p><strong>Age:</strong> {{ character.age }}</p>
+      <p><strong>Gender:</strong> {{ character.gender }}</p>
+      <p><strong>Species:</strong> {{ character.species }}</p>
+      <p><strong>Occupation:</strong> {{ character.occupation }}</p>
+      <p><strong>Home Planet:</strong> {{ character.homePlanet }}</p>
     </div>
   </div>
 </template>
@@ -60,19 +59,12 @@ export default {
 
     function getNewQuote() {
       const rand = Math.floor(Math.random() * character.value.sayings.length)
-      console.log(rand, character.value.sayings[rand])
       quote.value = character.value.sayings[rand]
-    }
-
-    // test function
-    function clearSelected() {
-      store.dispatch('characters/setSelected', {})
     }
 
     return {
       character,
       quote,
-      clearSelected,
       getNewQuote,
     }
   },
@@ -80,5 +72,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.character-detail {
+  border: 1px solid var(--color-primary);
+  border-radius: 1rem;
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
 
+  > figure {
+    flex: 0 0 auto;
+  }
+
+  > div {
+    flex: 1 1 60%;
+    text-align: left;
+  }
+}
 </style>
