@@ -1,9 +1,8 @@
 <template>
   <Splide :options="options">
     <SplideSlide
-      v-for="character in data"
+      v-for="(character, index) in data"
       :key="character.id"
-      @click="$emit('selected', character.id)"
     >
       <figure>
         <img
@@ -11,7 +10,15 @@
           :alt="$filters.getFullName(character.name)"
         >
         <caption>
-          {{ getNewQuoteFrom(character) }}
+          {{ quotes[index] }}
+          <template v-if="character.sayings.length > 1">
+            <button @click.prevent="setNewQuoteToIndex(index, character.sayings)">
+              Get new quote
+            </button>
+          </template>
+          <button @click="$emit('selected', character.id)">
+            More information...
+          </button>
         </caption>
       </figure>
     </SplideSlide>
@@ -19,6 +26,7 @@
 </template>
 
 <script>
+import { ref } from '@vue/runtime-core'
 import { Splide, SplideSlide } from '@splidejs/vue-splide'
 import '@splidejs/splide/dist/css/themes/splide-default.min.css'
 
@@ -38,14 +46,26 @@ export default {
     Splide,
     SplideSlide,
   },
-  setup() {
+  setup(props) {
+
+    const quotes = ref([])
+    for(const character in props.data) {
+      quotes.value.push(getNewQuoteFrom(props.data[character]))
+    }
+
     function getNewQuoteFrom(character) {
       const rand = Math.floor(Math.random() * character.sayings.length)
       return character.sayings[rand]
     }
 
+    function setNewQuoteToIndex(index, characterQuotes) {
+      quotes.value[index] = getNewQuoteFrom({sayings: characterQuotes})
+    }
+
     return {
+      quotes,
       getNewQuoteFrom,
+      setNewQuoteToIndex,
     }
   },
 }
