@@ -4,7 +4,7 @@
     <h1>The Futurama Characters Board</h1>
     <div v-if="favorites.length > 0">
       <h2>
-        Please select one of our {{ favorites.length }} favorites characters!!
+        Discover {{ favorites.length }} new characters!!
       </h2>
       <base-carousel
         :options="{ rewind: true, pagination: false }"
@@ -23,25 +23,37 @@ import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 
-// This will be used to show our favorite character to the landing page
-const defaultCharacters = ['fry', 'rodriguez', 'zoidberg']
-
 export default {
   components: {
-    // Splide,
-    // SplideSlide,
     BaseCarousel,
   },
   setup() {
     const router = useRouter()
     const store = useStore()
     const dataStored = computed(() => store.getters['characters/getCharacters'])
-    const favorites = ref(dataStored.value.filter((character) => {
-      return defaultCharacters.includes(character.name.last.toLowerCase())
-    }))
+    const favorites = computed(() => getRandomCharacters())
 
     // Initiate application state
     store.dispatch('characters/initState')
+
+    function getRandomCharacters(limit = 3) {
+      const indexList = setRadomIndexList(limit)
+      return dataStored.value.filter((character, index) => {
+        return indexList.includes(index)
+      })
+    }
+
+    function setRadomIndexList(limit) {
+      const list = []
+      const getRandomIndex = () => Math.floor(Math.random() * dataStored.value.length)
+      for(let i = 0; i < limit; i++) {
+        let randomIndex = getRandomIndex()
+        // generate new randomIndex until it's not include in the array
+        while (list.includes(randomIndex)) { randomIndex = getRandomIndex() }
+        list[i] = randomIndex
+      }
+      return list
+    }
 
     function getNewQuoteFrom(character) {
       const rand = Math.floor(Math.random() * character.sayings.length)
