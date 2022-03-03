@@ -14,7 +14,12 @@
       <h1>{{ $filters.getFullName(character.name) }}</h1>
       <p>
         <cite>{{ quote }}</cite>
-        <br><button @click.prevent="getNewQuote">Get new citation</button>
+        <template v-if="character.sayings.length > 1">
+          {{ character.sayings.length }}
+          <br><button @click.prevent="getNewQuote">
+            Get new citation
+          </button>
+        </template>
       </p>
       <p><strong>Age:</strong> {{ character.age }}</p>
       <p><strong>Gender:</strong> {{ character.gender }}</p>
@@ -42,8 +47,6 @@ export default {
     const isSelectedExist = character.value.id ? true : false
     const id = computed(() => parseInt(props.id))
     const quote = ref(character.value.sayings[0])
-
-    // console.log('>is char selected ? ', isSelectedExist ? 'yep' : 'nope')
 
     if (!isSelectedExist) {
       // 1 check if state has been initited
