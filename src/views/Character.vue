@@ -11,17 +11,17 @@
             <button
               @click.prevent="openCharacterDetail(data.id)"
             >
-              <figure class="card__link" href="#">
+              <figure
+                class="card__link"
+                href="#"
+              >
                 <img
                   class="card__image"
                   :src="data.images.main"
-                />
+                >
               </figure>
               <div class="card__text">
-                <p>{{ $filters.getFullName(data.name) }}</p>
-                <p>{{ data.age }}</p>
-                <p>{{ data.homePlanet }}</p>
-                <p>{{ data.occupation }}</p>
+                <h2>{{ $filters.getFullName(data.name) }}</h2>
                 <p>{{ data.species }}</p>
               </div>
             </button>

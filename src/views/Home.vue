@@ -11,7 +11,11 @@
         :data="favorites"
         @selected="openCharacterDetail"
       />
-      <p>Or see the <router-link :to="{ name: 'Characters' }">complete list</router-link></p>
+      <p>
+        Or see the <router-link :to="{ name: 'Characters' }">
+          complete list
+        </router-link>
+      </p>
     </div>
   </div>
 </template>
@@ -19,7 +23,7 @@
 <script>
 // @ is an alias to /src
 import BaseCarousel from '@/components/BaseCarousel.vue'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 

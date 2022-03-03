@@ -7,7 +7,7 @@
 
 <script>
 import '@/assets/styles/index.scss'
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useRoute  } from 'vue-router'
 import TheNavigation from './components/TheNavigation.vue'
 export default {
