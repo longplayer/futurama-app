@@ -1,34 +1,37 @@
 <template>
-  <div
+  <section
     v-if="isSelectedExist"
     :id="`cid-${id}`"
-    class="character-detail"
+    class="character"
   >
-    <figure class="image">
-      <img
-        :src="character.images.main"
-        :alt="`${character.name.first} ${character.name.last}'s portrait`"
-      >
+    <figure class="character__figure">
+      <div class="image-wrapper">
+        <img
+          class="character__image"
+          :src="character.images.main"
+          :alt="`${character.name.first} ${character.name.last}'s portrait`"
+        >
+      </div>
+      <caption class="character__caption">
+        <strong>Age:</strong> {{ character.age }}
+        <br><strong>Gender:</strong> {{ character.gender }}
+        <br><strong>Species:</strong> {{ character.species }}
+        <br><strong>Occupation:</strong> {{ character.occupation }}
+        <br><strong>Home Planet:</strong> {{ character.homePlanet }}
+      </caption>
     </figure>
-    <div class="content">
-      <p>Hello, my name is</p>
+
+    <div class="character__info">
+      <h2>Hello, I'm</h2>
       <h1>{{ $filters.getFullName(character.name) }}</h1>
-      <p>
-        <cite>{{ quote }}</cite>
-        <template v-if="character.sayings.length > 1">
-          {{ character.sayings.length }}
-          <br><button @click.prevent="getNewQuote">
-            Get new citation
-          </button>
-        </template>
+      <h2>Famous quotes:</h2>
+      <p
+        v-for="(quote, index) in character.sayings"
+        :key="index">
+        {{ quote }}
       </p>
-      <p><strong>Age:</strong> {{ character.age }}</p>
-      <p><strong>Gender:</strong> {{ character.gender }}</p>
-      <p><strong>Species:</strong> {{ character.species }}</p>
-      <p><strong>Occupation:</strong> {{ character.occupation }}</p>
-      <p><strong>Home Planet:</strong> {{ character.homePlanet }}</p>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -47,7 +50,7 @@ export default {
     const store = useStore()
     const character = ref(store.getters['characters/getSelected'])
     const isDataFetched = computed(() => store.getters['characters/getCharacters'].length ? true : false)
-    const isSelectedExist = computed(() => character.value.length ? true : false)
+    const isSelectedExist = ref(() => character.value.length ? true : false)
     const id = computed(() => parseInt(props.id))
 
     console.log('>> ONCREATE:', `${isDataFetched.value}: [IS data fetched]`)
@@ -91,6 +94,9 @@ export default {
     }
 
     onMounted(() => {
+
+      console.log('>TEST',isSelectedExist.value, character.value)
+
       if(isSelectedExist.value) {
         quote.value = character.value.sayings[0]
       }
@@ -107,13 +113,52 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.character-detail {
-  border: 1px solid var(--color-primary);
+.character {
   border-radius: 1rem;
   width: 100%;
   padding: 1rem;
   display: flex;
   flex-wrap: wrap;
+
+  &__figure {
+    flex: 0 0 auto;
+    width: auto;
+    padding: 1rem;
+
+    .image-wraper {
+      background-color: #fff;
+      border: 1px solid #000;
+      border-radius: 1rem;
+
+      img {
+        object-fit: contain;
+        width: 80%;
+        height: auto;
+      }
+    }
+
+    caption {
+      display: block;
+      width: 100%;
+      padding-top: 2rem;
+      text-align: left;
+      line-height: 1.5rem;
+    }
+  }
+
+  &__info {
+    flex: 1 1 auto;
+    width: auto;
+    p {
+      font-weight: 700;
+      line-height: 1.6rem;
+      &::after,
+      &::before {
+        content: '"';
+        display: inline;
+      }
+    }
+  }
 
   > figure {
     flex: 0 0 auto;

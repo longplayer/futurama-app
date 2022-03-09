@@ -1,5 +1,5 @@
 <template>
-  <div class="character-list">
+  <section class="character-list">
     <h1>Futurama character list</h1>
     <template v-if="isDataFetched">
       <ul>
@@ -7,29 +7,26 @@
           v-for="data in dataStored"
           :key="data.id"
         >
-          <div class="card">
-            <button
-              @click.prevent="openCharacterDetail(data.id)"
+          <button class="card" @click.prevent="openCharacterDetail(data.id)">
+            <figure
+              class="card__figure"
             >
-              <figure
-                class="card__link"
-                href="#"
+              <img
+                class="card__image"
+                :src="data.images.main"
               >
-                <img
-                  class="card__image"
-                  :src="data.images.main"
-                >
-              </figure>
-              <div class="card__text">
-                <h2>{{ $filters.getFullName(data.name) }}</h2>
-                <p>{{ data.species }}</p>
-              </div>
-            </button>
-          </div>
+            </figure>
+            <div class="card__text">
+              <h2>{{ $filters.getFullName(data.name) }}</h2>
+              <span class="text-link">
+                see details
+              </span>
+            </div>
+          </button>
         </li>
       </ul>
     </template>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -93,33 +90,55 @@ ul {
 
 .card {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   height: 100%;
-  background-color: var(--color-primary);
-  padding: 1rem;
+  background-color: transparent;
+  border: 1px solid var(--color-primary);
+  border-radius: 1rem;
   width: 100%;
-  img {
-    transition: transform 250ms ease;
-    transform: scale(.8);
+
+  &__figure {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 256px;
+    padding-top: 1rem;
   }
 
-  &:hover {
-    background-color: var(--color-secondary);
-    button {
-      color: #FFF;
+  &__image {
+    transition: transform 250ms ease;
+    transform: scale(.8);
+    max-width: 100%;
+    max-height: 100%;
+  }
 
-      img {
-        transform: scale(1);
-      }
+  &__text {
+    height: auto;
+    margin: auto;
+    padding: 2rem .5rem;
+    h2 {
+      margin-bottom: .5rem;
+    }
+    .text-link {
+      margin-top: .75rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 600ms ease 250ms;
+      text-decoration: underline;
     }
   }
 
-  button {
-    cursor: pointer;
-    height: 100%;
-    margin: auto 0;
-    background-color: transparent;
-    border: 0 none;
+  &:hover {
+    background-color: #FFF;
+
+    .card__image {
+      transform: scale(1);
+    }
+    .text-link {
+      opacity: 1;
+      visibility: visible;
+    }
+
   }
 }
 

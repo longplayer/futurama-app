@@ -1,5 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&family=Pattaya&display=swap');
+
 :root {
   --color-primary: #42b983;
+  --color-primary-dark: #18724a;
+  --color-primary-light: #b4f8da;
   --color-secondary: #2c3e50;
 }
 
@@ -12,19 +16,31 @@ html {
 }
 
 body {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inconsolata', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: var(--color-secondary);
+  background-color: var(--color-primary-light);
+}
+.heading {
+  font-family: 'Pattaya', sans-serif;
 }
 
-
-a {
-  font-weight: bold;
-  color: var(--color-secondary);
-
-  &.router-link-exact-active {
-    color: var(--color-primary);
-  }
+h1, h2, h3 {
+  font-family: 'Pattaya', sans-serif;
 }
+
+h1 {
+  font-size: 4.5rem; //72px
+}
+
+h2 {
+  font-size: 2rem; //32px
+}
+
+p {
+  font-size: 1rem;
+}
+
+// layout

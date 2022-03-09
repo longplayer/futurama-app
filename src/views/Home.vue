@@ -1,23 +1,17 @@
 <template>
-  <div class="home">
-    <p>Welcome to</p>
-    <h1>The Futurama Characters Board</h1>
-    <div v-if="favorites.length > 0">
-      <h2>
-        Discover {{ favorites.length }} new characters!!
-      </h2>
+  <section class="home">
+    <div class="carousel" v-if="favorites.length > 0">
       <base-carousel
         :options="{ rewind: true, pagination: false }"
         :data="favorites"
         @selected="openCharacterDetail"
       />
-      <p>
-        Or see the <router-link :to="{ name: 'Characters' }">
-          complete list
-        </router-link>
-      </p>
     </div>
-  </div>
+    <div class="title">
+      <h2>Welcome to</h2>
+      <h1>Futurama's characters board</h1>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -87,5 +81,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+.carousel {}
+.title {
+  position: relative;
+  margin: 4rem auto;
+  h1 {
+    line-height: 4.5rem;
+    margin: 0;
+  }
+}
 </style>
