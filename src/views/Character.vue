@@ -77,8 +77,8 @@ export default {
 <style scoped lang="scss">
 ul {
   display: grid;
-  grid-template-rows: repeat(3, 1fr);
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: .5rem;
   list-style-type: none;
   max-width: 100%;
@@ -103,7 +103,6 @@ ul {
     transform: scale(.8);
   }
 
-
   &:hover {
     background-color: var(--color-secondary);
     button {
@@ -121,7 +120,13 @@ ul {
     margin: auto 0;
     background-color: transparent;
     border: 0 none;
+  }
+}
 
+@media screen and (min-width: 760px) {
+  ul {
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 </style>

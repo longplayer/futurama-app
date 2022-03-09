@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="isSelectedExist"
     :id="`cid-${id}`"
     class="character-detail"
   >
@@ -31,8 +32,10 @@
 </template>
 
 <script>
-import { computed, ref } from '@vue/runtime-core'
+import { computed, ref, onMounted } from '@vue/runtime-core'
 import { useStore } from 'vuex'
+import { get } from '@vueuse/core'
+
 export default {
   props: {
     id: {
@@ -44,20 +47,42 @@ export default {
     const store = useStore()
     const character = ref(store.getters['characters/getSelected'])
     const isDataFetched = computed(() => store.getters['characters/getCharacters'].length ? true : false)
-    const isSelectedExist = character.value.id ? true : false
+    const isSelectedExist = computed(() => character.value.length ? true : false)
     const id = computed(() => parseInt(props.id))
-    const quote = ref(character.value.sayings[0])
 
-    if (!isSelectedExist) {
+    console.log('>> ONCREATE:', `${isDataFetched.value}: [IS data fetched]`)
+    console.log('>> ONCREATE:', `${isSelectedExist.value}: [IS selected defined]`)
+    console.log('>> Character List Length: ', character.value.length, get(character))
+
+    // const quote = ref(character.value.sayings[0])
+    const quote = ref(isSelectedExist.value ? character.value.sayings[0] : null)
+
+    if (!isSelectedExist.value) {
       // 1 check if state has been initited
       // 2 IF-NO: initState and wait...
       // 2 IF-YES: setSelected with props.id
-      if(isDataFetched.value) {
-        character.value = store.getters['characters/getCharacters']
-          .filter((data) => data.id === id.value)[0]
-
+      if(isDataFetched.value)
+      {
+        character.value = findSelectedfromId(id.value, store.getters['characters/getCharacters'])
         store.dispatch('characters/setSelected', character.value)
       }
+      else
+      {
+        store.dispatch('characters/initState')
+          .then(() => {
+            character.value = findSelectedfromId(id.value, store.getters['characters/getCharacters'])
+            console.log('>>>', id.value, store.getters['characters/getCharacters'])
+            console.log('>>> Define SELECTED to', character.value)
+            console.log('>>> Is SELECTED exisit now ? ', isSelectedExist.value, character.value.length)
+          })
+          .catch((error) => {
+            console.error('>> API request error:', id.value, error)
+          })
+      }
+    }
+
+    function findSelectedfromId(id, list) {
+      return list.filter((data) => data.id === id)[0]
     }
 
     function getNewQuote() {
@@ -65,9 +90,16 @@ export default {
       quote.value = character.value.sayings[rand]
     }
 
+    onMounted(() => {
+      if(isSelectedExist.value) {
+        quote.value = character.value.sayings[0]
+      }
+    })
+
     return {
       character,
       quote,
+      isSelectedExist,
       getNewQuote,
     }
   },
